@@ -11,7 +11,7 @@
     uglify = require('gulp-uglify'),
     notifier = require("node-notifier"),
     gutil = require('gulp-util'),
-    minifyCss = require('gulp-minify-css'),
+    cssnano = require('gulp-cssnano'),
     debug = require('gulp-debug'),
     connect = require('gulp-connect'),
     imagemin = require('gulp-imagemin'),
@@ -57,7 +57,7 @@
         notifier.notify({title: "Sass compile error", message: err.message });
         this.emit("end");
       }))
-      .pipe(minifyCss())
+      .pipe(cssnano())
       .pipe(autoprefixer('last 2 versions'))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./build/'));
@@ -73,7 +73,7 @@
         notifier.notify({title: "Sass compile error (vendor)", message: err.message });
         this.emit("end");
       }))
-      .pipe(minifyCss())
+      .pipe(cssnano())
       .pipe(gulp.dest('./build/'));
   });
 
