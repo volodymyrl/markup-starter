@@ -4,6 +4,8 @@
   var gulp = require('gulp'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
+    watch = require('gulp-watch'),
+    newer = require('gulp-newer'),
     concat = require('gulp-concat'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
@@ -81,15 +83,17 @@
    * Images minification
    */
   gulp.task('imageMin', function () {
-    del('./build/images/**/*').then(function () {
+    var imgDest = 'build/images';
+    //del('./build/images/**/*').then(function () {
       gulp.src('./images/**/*')
+        .pipe(newer(imgDest))
         .pipe(imagemin({
           progressive: true,
           svgoPlugins: [{removeViewBox: false}],
           use: [pngquant()]
         }))
-        .pipe(gulp.dest('build/images'));
-    });
+        .pipe(gulp.dest(imgDest));
+    //});
   });
 
   /**
@@ -100,7 +104,10 @@
     gulp.watch('./gulpfile.js', ['buildJsVendors']);
     gulp.watch(['./scss/**/*', '!scss/vendor/**/*'], ['buildSass']);
     gulp.watch('../scss/vendor/vendor.scss', ['buildStylesVendors']);
-    gulp.watch('./images/**/*', ['imageMin']);
+    gulp.src('./images/**/*')
+    watch('./images/**/*', function () {
+      gulp.run('imageMin');
+    });
     gulp.watch('./build/*').on('change', function (file) {
       gulp.src(file.path).pipe(connect.reload());
     });

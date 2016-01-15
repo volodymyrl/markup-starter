@@ -30,6 +30,9 @@ $media-expressions: (
 @import 'base/typography';
 @import 'base/forms';
 
+body {
+  background: #ff0000;
+}
 #wrapper {
   max-width: 1000px;
 }
