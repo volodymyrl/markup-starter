@@ -14,15 +14,14 @@
     minifyCss = require('gulp-minify-css'),
     debug = require('gulp-debug'),
     connect = require('gulp-connect'),
-    rename = require('gulp-rename'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
     del = require('del'),
 
     // List of all vendor js files
     vendor = [
-      './vendor/jquery/dist/jquery.js',
-      './node_modules/bootstrap-sass/assets/javascripts/bootstrap.js'
+      './bower/jquery/dist/jquery.js',
+      './bower/bootstrap-sass/assets/javascripts/bootstrap.js'
     ];
 
   /**
@@ -34,7 +33,7 @@
       .pipe(concat('app.js'))
       .pipe(uglify())
       .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./build/'))
+      .pipe(gulp.dest('./build/'));
   });
 
   /**
@@ -78,35 +77,45 @@
       .pipe(gulp.dest('./build/'));
   });
 
+  /**
+   * Images minification
+   */
   gulp.task('imageMin', function () {
     del('./build/images/**/*').then(function () {
       gulp.src('./images/**/*')
-      .pipe(imagemin({
-        progressive: true,
-        svgoPlugins: [{removeViewBox: false}],
-        use: [pngquant()]
-      }))
-      .pipe(gulp.dest('build/images'));
+        .pipe(imagemin({
+          progressive: true,
+          svgoPlugins: [{removeViewBox: false}],
+          use: [pngquant()]
+        }))
+        .pipe(gulp.dest('build/images'));
     });
-    
   });
 
   /**
    * Watch for file changes
    */
   gulp.task('watch', function () {
-    gulp.watch(['./client/main.js', './client/app/**/*.js'], ['buildApp']);
-    gulp.watch(['./client/app/**/*.html'], ['buildApp']);
-    gulp.watch('./client/vendor.js', ['buildJsVendors']);
-    gulp.watch(['./client/main.scss', './client/styles/*.scss', './client/app/**/*.scss'], ['buildSass']);
-    gulp.watch('./client/vendor.scss', ['buildStylesVendors']);
+    gulp.watch('./js/**/*', ['buildCustomJS']);
+    gulp.watch('./gulpfile.js', ['buildJsVendors']);
+    gulp.watch(['./scss/**/*', '!scss/vendor/**/*'], ['buildSass']);
+    gulp.watch('../scss/vendor/vendor.scss', ['buildStylesVendors']);
+    gulp.watch('./images/**/*', ['imageMin']);
+    gulp.watch('./build/*').on('change', function (file) {
+      gulp.src(file.path).pipe(connect.reload());
+    });
   });
 
+  /**
+   * Starting local server
+   */
   gulp.task('startLocalhost', function () {
-    connect.server();
+    connect.server({
+      livereload: true
+    });
   });
 
   // Default Gulp Task
-  gulp.task('default', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'startLocalhost']);
+  gulp.task('default', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'startLocalhost', 'watch']);
 
 }());

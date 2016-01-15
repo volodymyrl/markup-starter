@@ -20,12 +20,13 @@ node_modules/
 *~
 
 # markup
+build/
 .sass-cache
 node_modules
 *.map
 .tmp
 tmp
-bower_components
+bower/
 
 # wordpress configs and uploads
 /wp-config.php
