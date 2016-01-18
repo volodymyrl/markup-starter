@@ -18,7 +18,7 @@
     connect = require('gulp-connect'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
-    del = require('del'),
+    rimraf = require('gulp-rimraf'),
 
     // List of all vendor js files
     vendor = [
@@ -84,16 +84,18 @@
    */
   gulp.task('imageMin', function () {
     var imgDest = 'build/images';
-    //del('./build/images/**/*').then(function () {
-      gulp.src('./images/**/*')
-        .pipe(newer(imgDest))
-        .pipe(imagemin({
-          progressive: true,
-          svgoPlugins: [{removeViewBox: false}],
-          use: [pngquant()]
-        }))
-        .pipe(gulp.dest(imgDest));
-    //});
+    var imgSource = './images/**/*';
+    gulp.src(imgDest)
+      .pipe(newer(imgSource))
+      .pipe(rimraf());
+    gulp.src(imgSource)
+      .pipe(newer(imgDest))
+      .pipe(imagemin({
+        progressive: true,
+        svgoPlugins: [{removeViewBox: false}],
+        use: [pngquant()]
+      }))
+      .pipe(gulp.dest(imgDest));
   });
 
   /**
