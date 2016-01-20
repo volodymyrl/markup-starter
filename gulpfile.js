@@ -20,11 +20,15 @@
     pngquant = require('imagemin-pngquant'),
     rimraf = require('gulp-rimraf'),
 
+    imgDest = 'build/images',
+    imgSource = './images/**/*',
+
     // List of all vendor js files
     vendor = [
       './bower/jquery/dist/jquery.js',
       './bower/bootstrap-sass/assets/javascripts/bootstrap.js'
     ];
+    
 
   /**
    * Build custom js
@@ -83,11 +87,6 @@
    * Images minification
    */
   gulp.task('imageMin', function () {
-    var imgDest = 'build/images';
-    var imgSource = './images/**/*';
-    gulp.src(imgDest)
-      .pipe(newer(imgSource))
-      .pipe(rimraf());
     gulp.src(imgSource)
       .pipe(newer(imgDest))
       .pipe(imagemin({
@@ -96,6 +95,13 @@
         use: [pngquant()]
       }))
       .pipe(gulp.dest(imgDest));
+  });
+
+  /**
+   * Clean image build directory
+   */
+  gulp.task('imageClean', function () {
+    gulp.src(imgDest).pipe(rimraf());
   });
 
   /**
@@ -122,6 +128,33 @@
     connect.server({
       livereload: true
     });
+  });
+
+  /**
+   * Creating production folder without unnecessary files
+   */
+  gulp.task('production', ['cleanProduction'], function () {    
+    gulp.src(['./**/*',
+      '!images/',
+      '!node_modules/**/*',
+      '!node_modules/',
+      '!scss/**/*',
+      '!scss/',
+      '!build/**.map',
+      '!.bowerrc',
+      '!bower.json',
+      '!.gitignore',
+      '!gulpfile.js',
+      '!LICENSE',
+      '!package.json',
+      '!production',
+      '!README.md'])
+          .pipe(gulp.dest('./production'));
+  });
+
+  gulp.task('cleanProduction', function () {
+    return gulp.src('./production/', {read: false})
+      .pipe(rimraf());
   });
 
   // Default Gulp Task
