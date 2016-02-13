@@ -21,6 +21,10 @@
   ],
   "dependencies": {
     "jquery": "~2.2.0",
-    "bootstrap-sass": "~3.3.6"
+    "bootstrap-sass": "~3.3.6",
+    "normalize-css": "~3.0.3",
+    "bower": "*",
+    "install": "~1.0.4",
+    "include-media": "~1.4.2"
   }
 }

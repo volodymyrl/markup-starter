@@ -21,14 +21,7 @@
     rimraf = require('gulp-rimraf'),
 
     imgDest = 'build/images',
-    imgSource = './images/**/*',
-
-    // List of all vendor js files
-    vendor = [
-      './bower/jquery/dist/jquery.js',
-      './bower/bootstrap-sass/assets/javascripts/bootstrap.js'
-    ];
-    
+    imgSource = './images/**/*';   
 
   /**
    * Build custom js
@@ -38,9 +31,7 @@
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(concat('app.js'))
       .pipe(uglify().on('error', function(err) {
-        gutil.log(gutil.colors.red("JS error"), gutil.colors.blue(err.message));
-        notifier.notify({title: "JS error", message: err.message });
-        this.emit("end");
+        showError.apply(this, ['JS error', err]);
       }))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./build/'));
@@ -50,7 +41,7 @@
    * Build js vendor (concatenate vendor array)
    */
   gulp.task('buildJsVendors', function () {
-    gulp.src(vendor)
+    gulp.src(require('./vendor/vendor.js'))
       .pipe(concat('vendor.js'))
       .pipe(uglify())
       .pipe(gulp.dest('./build/'));
@@ -63,9 +54,7 @@
     gulp.src('./scss/app.scss')
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sass().on('error', function (err) {
-        gutil.log(gutil.colors.red("Sass compile error"), gutil.colors.blue(err.message));
-        notifier.notify({title: "Sass compile error", message: err.message });
-        this.emit("end");
+        showError.apply(this, ['Sass compile error', err]);
       }))
       .pipe(cssnano())
       .pipe(autoprefixer('last 2 versions'))
@@ -77,11 +66,9 @@
    * Build styles for vendor from SASS
    */
   gulp.task('buildStylesVendors', function () {
-    gulp.src('./scss/vendor/vendor.scss')
+    gulp.src('./vendor/vendor.scss')
       .pipe(sass().on('error', function (err) {
-        gutil.log(gutil.colors.bgRed("Sass compile error (vendor)"), gutil.colors.bgBlue(err.message));
-        notifier.notify({title: "Sass compile error (vendor)", message: err.message });
-        this.emit("end");
+        showError.apply(this, ['Sass compile error (vendor)', err]);
       }))
       .pipe(cssnano())
       .pipe(gulp.dest('./build/'));
@@ -113,10 +100,9 @@
    */
   gulp.task('watch', function () {
     gulp.watch('./js/**/*', ['buildCustomJS']);
-    gulp.watch('./gulpfile.js', ['buildJsVendors']);
-    gulp.watch(['./scss/**/*', '!scss/vendor/**/*'], ['buildSass']);
-    gulp.watch('../scss/vendor/vendor.scss', ['buildStylesVendors']);
-    gulp.src('./images/**/*')
+    gulp.watch('./vendor/vendor.js', ['buildJsVendors']);
+    gulp.watch('./scss/**/*', ['buildSass']);
+    gulp.watch('./vendor/vendor.scss', ['buildStylesVendors']);
     watch('./images/**/*', function () {
       gulp.run('imageMin');
     });
@@ -165,6 +151,12 @@
     return gulp.src('./production/', {read: false})
       .pipe(rimraf());
   });
+
+  function showError(preffix, err) {
+    gutil.log(gutil.colors.red(preffix), gutil.colors.blue(err.message));
+    notifier.notify({title:preffix, message: err.message });
+    this.emit("end");
+  }
 
   // Default Gulp Task
   gulp.task('default', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'startLocalhost', 'watch']);
