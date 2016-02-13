@@ -37,7 +37,11 @@
     gulp.src('./js/**/*')
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(concat('app.js'))
-      .pipe(uglify())
+      .pipe(uglify().on('error', function(err) {
+        gutil.log(gutil.colors.red("JS error"), gutil.colors.blue(err.message));
+        notifier.notify({title: "JS error", message: err.message });
+        this.emit("end");
+      }))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./build/'));
   });
