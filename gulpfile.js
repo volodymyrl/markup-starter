@@ -106,7 +106,7 @@
     watch('./images/**/*', function () {
       gulp.run('imageMin');
     });
-    gulp.watch('./build/*').on('change', function (file) {
+    gulp.watch(['./build/*', './*.html']).on('change', function (file) {
       gulp.src(file.path).pipe(connect.reload());
     });
   });
@@ -153,7 +153,7 @@
   });
 
   function showError(preffix, err) {
-    gutil.log(gutil.colors.red(preffix), gutil.colors.blue(err.message));
+    gutil.log(gutil.colors.white.bgRed(' ' + preffix + ' '), gutil.colors.white.bgBlue(' ' + err.message + ' '));
     notifier.notify({title:preffix, message: err.message });
     this.emit("end");
   }
