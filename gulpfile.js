@@ -136,6 +136,11 @@
   gulp.task('production', ['cleanProduction'], function () {    
     gulp.src(['./**/*',
       '!images/',
+      '!images/**/*',
+      '!bower/',
+      '!bower/**/*',
+      '!js/',
+      '!js/**/*',
       '!node_modules/**/*',
       '!node_modules/',
       '!scss/**/*',
