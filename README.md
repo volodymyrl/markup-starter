@@ -14,6 +14,10 @@
 * Entry point for javascript is `js/app.js` you can **import** all you *.js* files from here using [ES6 import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) feature;
 * All javascript is **babelified** so yes! You can use all kind of [ES6 features](https://babeljs.io/docs/learn-es2015/) here.
 
+### Images
+* All **images** placed in `images/` folder will be automatically **optimized** and put in `build/images/` folder;
+* To **clear** `build/images/` folder use `gulp imageClean` task.
+
 ### Vendor
 * All **extensions** must be installed by the [Bower](http://bower.io/#install-packages);
 * After installing the extension you must **include its files**:
