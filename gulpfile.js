@@ -43,7 +43,7 @@
    * Build js vendor (concatenate vendor array)
    */
   gulp.task('buildJsVendors', function () {
-    gulp.src(require('./vendor/vendor.js'))
+    gulp.src(require('./vendor_entries/vendor.js'))
       .pipe(concat('vendor.js'))
       .pipe(uglify())
       .pipe(gulp.dest('./build/'));
@@ -68,7 +68,7 @@
    * Build styles for vendor from SASS
    */
   gulp.task('buildStylesVendors', function () {
-    gulp.src('./vendor/vendor.scss')
+    gulp.src('./vendor_entries/vendor.scss')
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error (vendor)', err]);
       }))
@@ -102,9 +102,9 @@
    */
   gulp.task('watch', function () {
     gulp.watch('./js/**/*', ['buildCustomJS']);
-    gulp.watch('./vendor/vendor.js', ['buildJsVendors']);
+    gulp.watch('./vendor_entries/vendor.js', ['buildJsVendors']);
     gulp.watch('./scss/**/*', ['buildSass']);
-    gulp.watch('./vendor/vendor.scss', ['buildStylesVendors']);
+    gulp.watch('./vendor_entries/vendor.scss', ['buildStylesVendors']);
     watch('./images/**/*', function () {
       gulp.run('imageMin');
     });
