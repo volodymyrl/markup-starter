@@ -23,3 +23,7 @@
 * After installing the extension you must **include its files**:
   * **js files** must be included in `vendor_entries/vendor.js` by adding new elements to the **array**;
   * **css or sass files** must be included in `vendor_entries/vendor.scss` using `@import`.
+
+### Production
+* `gulp production` task creates the `production/` folder in the root of the project with **build files only**;
+* It will **help you** to **create clear** instances of code for the **production** or **further implementation**.
