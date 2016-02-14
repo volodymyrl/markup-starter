@@ -127,6 +127,8 @@
    */
   gulp.task('production', ['cleanProduction'], function () {    
     gulp.src(['./**/*',
+      '!vendor_entries',
+      '!vendor_entries/**/*',
       '!images/',
       '!images/**/*',
       '!bower/',
@@ -162,5 +164,6 @@
 
   // Default Gulp Task
   gulp.task('default', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'startLocalhost', 'watch']);
+  gulp.task('dev', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'watch']);
 
 }());
