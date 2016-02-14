@@ -19,6 +19,9 @@
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
     rimraf = require('gulp-rimraf'),
+    browserify = require('browserify'),
+    babelify = require('babelify'),
+    source = require('vinyl-source-stream'),
 
     imgDest = 'build/images',
     imgSource = './images/**/*';   
@@ -27,13 +30,12 @@
    * Build custom js
    */
   gulp.task('buildCustomJS', function () {
-    gulp.src('./js/**/*')
-      .pipe(sourcemaps.init({loadMaps: true}))
-      .pipe(concat('app.js'))
-      .pipe(uglify().on('error', function(err) {
-        showError.apply(this, ['JS error', err]);
-      }))
-      .pipe(sourcemaps.write('./'))
+    browserify({entries: './js/app.js', debug: true})
+      .transform('babelify', {presets: ['es2015']})
+      .bundle().on('error', function (err) {
+        showError.apply(this, ['JS error', err])
+      })
+      .pipe(source('app.js'))
       .pipe(gulp.dest('./build/'));
   });
 
