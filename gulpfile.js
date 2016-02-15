@@ -21,7 +21,8 @@
     rimraf = require('gulp-rimraf'),
     browserify = require('browserify'),
     babelify = require('babelify'),
-    source = require('vinyl-source-stream'),
+    iconfont = require('gulp-iconfont'),
+    iconfontCss = require('gulp-iconfont-css'),
 
     imgDest = 'build/images',
     imgSource = './images/**/*';   
@@ -151,11 +152,43 @@
           .pipe(gulp.dest('./production'));
   });
 
+  /**
+   * Clean production folder
+   */
   gulp.task('cleanProduction', function () {
     return gulp.src('./production/', {read: false})
       .pipe(rimraf());
   });
 
+  /**
+   * Make iconfont from svg icons
+   */
+  gulp.task('makeIconFont', function () {
+    var fontName = 'iconfont';
+    gulp.src(['./fonts/icons/*.svg'])
+      .pipe(iconfontCss({
+        fontName: fontName,
+        fontPath: '../../../build/fonts/iconfont/'
+      }))
+      .pipe(iconfont({
+        fontName: fontName
+       }))
+      .pipe(gulp.dest('./scss/fonts/iconfont/'));
+  });
+
+  /**
+   * Copy iconfont to the build folder
+   */
+  gulp.task('iconFont', ['makeIconFont'], function() {
+    gulp.src('./scss/fonts/**/*')
+      .pipe(gulp.dest('./build/fonts/'));
+  });
+
+  /**
+   * Show error in console
+   * @param  {String} preffix Title of the error
+   * @param  {STRING} err     Error message
+   */
   function showError(preffix, err) {
     gutil.log(gutil.colors.white.bgRed(' ' + preffix + ' '), gutil.colors.white.bgBlue(' ' + err.message + ' '));
     notifier.notify({title:preffix, message: err.message });
