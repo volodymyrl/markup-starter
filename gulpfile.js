@@ -168,10 +168,11 @@
     gulp.src(['./fonts/icons/*.svg'])
       .pipe(iconfontCss({
         fontName: fontName,
-        fontPath: '../../../build/fonts/iconfont/'
+        fontPath: 'fonts/iconfont/'
       }))
       .pipe(iconfont({
-        fontName: fontName
+        fontName: fontName,
+        normalize: true
        }))
       .pipe(gulp.dest('./scss/fonts/iconfont/'));
   });
@@ -187,7 +188,7 @@
   /**
    * Show error in console
    * @param  {String} preffix Title of the error
-   * @param  {STRING} err     Error message
+   * @param  {String} err     Error message
    */
   function showError(preffix, err) {
     gutil.log(gutil.colors.white.bgRed(' ' + preffix + ' '), gutil.colors.white.bgBlue(' ' + err.message + ' '));
