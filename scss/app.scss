@@ -27,6 +27,8 @@ $media-expressions: (
 @import 'base/typography';
 @import 'base/forms';
 
+@import 'components/starter-box';
+
 #wrapper {
   max-width: 1000px;
   margin: 0 auto;
