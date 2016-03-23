@@ -59,7 +59,7 @@
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error', err]);
       }))
-      .pipe(cssnano())
+      .pipe(cssnano({safe: true}))
       .pipe(autoprefixer('last 2 versions'))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest('./build/'));
@@ -73,7 +73,7 @@
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error (vendor)', err]);
       }))
-      .pipe(cssnano())
+      .pipe(cssnano({safe: true}))
       .pipe(gulp.dest('./build/'));
   });
 
