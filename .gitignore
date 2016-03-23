@@ -20,7 +20,7 @@ node_modules/
 *~
 
 # markup
-build/
+/build/
 .sass-cache
 node_modules
 *.map
