@@ -104,7 +104,9 @@
   gulp.task('watch', function () {
     gulp.watch('./js/**/*', ['buildCustomJS']);
     gulp.watch('./vendor_entries/vendor.js', ['buildJsVendors']);
-    gulp.watch('./scss/**/*', ['buildSass']);
+    watch('./scss/**/*', function () {
+      gulp.run('buildSass');
+    });
     gulp.watch('./vendor_entries/vendor.scss', ['buildStylesVendors']);
     watch('./images/**/*', function () {
       gulp.run('imageMin');
