@@ -167,7 +167,7 @@
    */
   gulp.task('makeIconFont', function () {
     var fontName = 'iconfont';
-    gulp.src(['./fonts/icons/*.svg'])
+    return gulp.src(['./fonts/icons/*.svg'])
       .pipe(iconfontCss({
         fontName: fontName,
         fontPath: 'fonts/iconfont/'
