@@ -25,13 +25,13 @@
     iconfontCss = require('gulp-iconfont-css'),
 
     imgDest = 'build/images',
-    imgSource = './src_images/**/*';   
+    imgSource = './src/images/**/*';   
 
   /**
    * Build custom js
    */
   gulp.task('buildCustomJS', function () {
-    browserify({entries: './js/app.js', debug: true})
+    browserify({entries: './src/js/app.js', debug: true})
       .transform('babelify', {presets: ['es2015']})
       .bundle().on('error', function (err) {
         showError.apply(this, ['JS error', err])
@@ -44,7 +44,7 @@
    * Build js vendor (concatenate vendor array)
    */
   gulp.task('buildJsVendors', function () {
-    gulp.src(require('./vendor_entries/vendor.js'))
+    gulp.src(require('./src/vendor_entries/vendor.js'))
       .pipe(concat('vendor.js'))
       .pipe(uglify())
       .pipe(gulp.dest('./build/'));
@@ -54,7 +54,7 @@
    * Build styles for application from SASS
    */
   gulp.task('buildSass', function () {
-    gulp.src('./scss/app.scss')
+    gulp.src('./src/scss/app.scss')
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error', err]);
@@ -69,7 +69,7 @@
    * Build styles for vendor from SASS
    */
   gulp.task('buildStylesVendors', function () {
-    gulp.src('./vendor_entries/vendor.scss')
+    gulp.src('./src/vendor_entries/vendor.scss')
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error (vendor)', err]);
       }))
@@ -102,13 +102,13 @@
    * Watch for file changes
    */
   gulp.task('watch', function () {
-    gulp.watch('./js/**/*', ['buildCustomJS']);
-    gulp.watch('./vendor_entries/vendor.js', ['buildJsVendors']);
-    watch('./scss/**/*', function () {
+    gulp.watch('./src/js/**/*', ['buildCustomJS']);
+    gulp.watch('./src/vendor_entries/vendor.js', ['buildJsVendors']);
+    watch('./src/scss/**/*', function () {
       gulp.run('buildSass');
     });
-    gulp.watch('./vendor_entries/vendor.scss', ['buildStylesVendors']);
-    watch('./images/**/*', function () {
+    gulp.watch('./src/vendor_entries/vendor.scss', ['buildStylesVendors']);
+    watch('./src/images/**/*', function () {
       gulp.run('imageMin');
     });
     gulp.watch(['./build/*', './*.html']).on('change', function (file) {
@@ -130,18 +130,12 @@
    */
   gulp.task('production', ['cleanProduction'], function () {    
     gulp.src(['./**/*',
-      '!vendor_entries',
-      '!vendor_entries/**/*',
-      '!images/',
-      '!images/**/*',
+      '!src/',
+      '!src/**/*',
       '!bower/',
       '!bower/**/*',
-      '!js/',
-      '!js/**/*',
       '!node_modules/**/*',
       '!node_modules/',
-      '!scss/**/*',
-      '!scss/',
       '!build/**.map',
       '!.bowerrc',
       '!bower.json',
@@ -167,7 +161,7 @@
    */
   gulp.task('makeIconFont', function () {
     var fontName = 'iconfont';
-    return gulp.src(['./fonts/icons/*.svg'])
+    return gulp.src(['./src/fonts/icons/*.svg'])
       .pipe(iconfontCss({
         fontName: fontName,
         fontPath: 'fonts/iconfont/'
@@ -177,14 +171,14 @@
         formats: ['ttf', 'eot', 'woff', 'svg', 'woff2'],
         normalize: true
        }))
-      .pipe(gulp.dest('./scss/fonts/iconfont/'));
+      .pipe(gulp.dest('./src/scss/fonts/iconfont/'));
   });
 
   /**
    * Copy iconfont to the build folder
    */
   gulp.task('iconFont', ['makeIconFont'], function() {
-    gulp.src('./scss/fonts/**/*')
+    gulp.src('./src/scss/fonts/**/*')
       .pipe(gulp.dest('./build/fonts/'));
   });
 
