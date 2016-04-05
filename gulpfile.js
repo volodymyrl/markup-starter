@@ -174,6 +174,7 @@
       }))
       .pipe(iconfont({
         fontName: fontName,
+        formats: ['ttf', 'eot', 'woff', 'svg', 'woff2'],
         normalize: true
        }))
       .pipe(gulp.dest('./scss/fonts/iconfont/'));
