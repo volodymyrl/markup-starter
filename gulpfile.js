@@ -25,7 +25,7 @@
     iconfontCss = require('gulp-iconfont-css'),
 
     imgDest = 'build/images',
-    imgSource = './images/**/*';   
+    imgSource = './src_images/**/*';   
 
   /**
    * Build custom js
