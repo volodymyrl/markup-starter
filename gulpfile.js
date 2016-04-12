@@ -183,6 +183,14 @@
   });
 
   /**
+   * Copy custom fonts to the build folder
+   */
+  gulp.task('copyFonts', function () {
+    gulp.src(['./src/fonts/**/*', '!./src/fonts/icons/', '!./src/fonts/icons/**/*'])
+      .pipe(gulp.dest('./build/fonts/'));
+  });
+
+  /**
    * Show error in console
    * @param  {String} preffix Title of the error
    * @param  {String} err     Error message
@@ -194,7 +202,7 @@
   }
 
   // Default Gulp Task
-  gulp.task('default', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'startLocalhost', 'watch']);
-  gulp.task('dev', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'imageMin', 'watch']);
+  gulp.task('default', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'copyFonts', 'imageMin', 'startLocalhost', 'watch']);
+  gulp.task('dev', ['buildCustomJS', 'buildSass', 'buildJsVendors', 'buildStylesVendors', 'copyFonts', 'imageMin', 'watch']);
 
 }());
