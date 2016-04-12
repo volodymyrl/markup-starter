@@ -178,7 +178,7 @@
    * Copy iconfont to the build folder
    */
   gulp.task('iconFont', ['makeIconFont'], function() {
-    gulp.src('./src/scss/fonts/**/*')
+    gulp.src(['./src/scss/fonts/**/*', '!./src/scss/fonts/iconfont/_icons.css'])
       .pipe(gulp.dest('./build/fonts/'));
   });
 
