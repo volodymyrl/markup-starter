@@ -21,11 +21,9 @@
     rimraf = require('gulp-rimraf'),
     browserify = require('browserify'),
     babelify = require('babelify'),
-    iconfont = require('gulp-iconfont'),
-    iconfontCss = require('gulp-iconfont-css'),
 
     imgDest = 'build/images',
-    imgSource = './src/images/**/*';   
+    imgSource = './src/images/**/*';
 
   /**
    * Build custom js
@@ -157,36 +155,10 @@
   });
 
   /**
-   * Make iconfont from svg icons
-   */
-  gulp.task('makeIconFont', function () {
-    var fontName = 'iconfont';
-    return gulp.src(['./src/fonts/icons/*.svg'])
-      .pipe(iconfontCss({
-        fontName: fontName,
-        fontPath: 'fonts/iconfont/'
-      }))
-      .pipe(iconfont({
-        fontName: fontName,
-        formats: ['ttf', 'eot', 'woff', 'svg', 'woff2'],
-        normalize: true
-       }))
-      .pipe(gulp.dest('./src/scss/fonts/iconfont/'));
-  });
-
-  /**
-   * Copy iconfont to the build folder
-   */
-  gulp.task('iconFont', ['makeIconFont'], function() {
-    gulp.src(['./src/scss/fonts/**/*', '!./src/scss/fonts/iconfont/_icons.css'])
-      .pipe(gulp.dest('./build/fonts/'));
-  });
-
-  /**
    * Copy custom fonts to the build folder
    */
   gulp.task('copyFonts', function () {
-    gulp.src(['./src/fonts/**/*', '!./src/fonts/icons/', '!./src/fonts/icons/**/*'])
+    gulp.src(['./src/fonts/**/*'])
       .pipe(gulp.dest('./build/fonts/'));
   });
 

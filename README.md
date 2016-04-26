@@ -27,10 +27,3 @@
 ### Production
 * `gulp production` task creates the `production/` folder in the root of the project with **build files only**;
 * It will **help you** to **create clear** instances of code for the **production** or **further implementation**.
-
-### Iconfont
-* You can create your own **iconfont** for the project;
-* You need to put all your icons (in **svg format**) in folder `srs/fonts/icons/`;
-* Then you run `gulp iconFont` command;
-* It will create a `src/scss/fonts/iconfont/_icons.css`, include it in your `src/scss/app.scss`
-* Enjoy your **iconfont**
