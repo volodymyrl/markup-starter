@@ -21,6 +21,7 @@ node_modules/
 
 # markup
 /build/
+bower/
 .sass-cache
 node_modules
 *.map
