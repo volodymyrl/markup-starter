@@ -26,7 +26,6 @@ node_modules
 *.map
 .tmp
 tmp
-bower/
 
 # wordpress configs and uploads
 /wp-config.php
