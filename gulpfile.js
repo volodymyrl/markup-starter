@@ -20,39 +20,47 @@
     pngquant = require('imagemin-pngquant'),
     rimraf = require('gulp-rimraf'),
     browserify = require('browserify'),
-    babelify = require('babelify'),
+    babelify = require('babelify');
 
-    imgDest = 'build/images',
-    imgSource = './src/images/**/*';
+  var Paths = {
+    build: 'build',
+    src: 'src',
+    buildImages: 'images',
+    srcImages: 'images',
+    srcJS: 'js',
+    fonts: 'fonts',
+    scss: 'scss',
+    production: 'production'
+  }
 
   /**
    * Build custom js
    */
   gulp.task('buildCustomJS', function () {
-    browserify({entries: './src/js/app.js', debug: true})
+    browserify({entries: `./${Paths.src}/${Paths.srcJS}/app.js`, debug: true})
       .transform('babelify', {presets: ['es2015']})
       .bundle().on('error', function (err) {
         showError.apply(this, ['JS error', err])
       })
       .pipe(source('app.js'))
-      .pipe(gulp.dest('./build/'));
+      .pipe(gulp.dest(`./${Paths.build}/`));
   });
 
   /**
    * Build js vendor (concatenate vendor array)
    */
   gulp.task('buildJsVendors', function () {
-    gulp.src(require('./src/vendor_entries/vendor.js'))
+    gulp.src(require(`./${Paths.src}/vendor_entries/vendor.js`))
       .pipe(concat('vendor.js'))
       .pipe(uglify())
-      .pipe(gulp.dest('./build/'));
+      .pipe(gulp.dest(`./${Paths.build}/`));
   });
 
   /**
    * Build styles for application from SASS
    */
   gulp.task('buildSass', function () {
-    gulp.src('./src/scss/app.scss')
+    gulp.src(`./${Paths.src}/${Paths.scss}/app.scss`)
       .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error', err]);
@@ -60,56 +68,56 @@
       .pipe(cssnano({safe: true}))
       .pipe(autoprefixer('last 2 versions'))
       .pipe(sourcemaps.write('./'))
-      .pipe(gulp.dest('./build/'));
+      .pipe(gulp.dest(`./${Paths.build}/`));
   });
 
   /**
    * Build styles for vendor from SASS
    */
   gulp.task('buildStylesVendors', function () {
-    gulp.src('./src/vendor_entries/vendor.scss')
+    gulp.src(`./${Paths.src}/vendor_entries/vendor.scss`)
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error (vendor)', err]);
       }))
       .pipe(cssnano({safe: true}))
-      .pipe(gulp.dest('./build/'));
+      .pipe(gulp.dest(`./${Paths.build}/`));
   });
 
   /**
    * Images minification
    */
   gulp.task('imageMin', function () {
-    gulp.src(imgSource)
-      .pipe(newer(imgDest))
+    gulp.src(`./${Paths.src}/${Paths.srcImages}/**/*`)
+      .pipe(newer(`${Paths.build}/${Paths.buildImages}/`))
       .pipe(imagemin({
         progressive: true,
         svgoPlugins: [{removeViewBox: false}],
         use: [pngquant()]
       }))
-      .pipe(gulp.dest(imgDest));
+      .pipe(gulp.dest(`${Paths.build}/${Paths.buildImages}/`));
   });
 
   /**
    * Clean image build directory
    */
   gulp.task('imageClean', function () {
-    gulp.src(imgDest).pipe(rimraf());
+    gulp.src(`${Paths.build}/${Paths.buildImages}/`).pipe(rimraf());
   });
 
   /**
    * Watch for file changes
    */
   gulp.task('watch', function () {
-    gulp.watch('./src/js/**/*', ['buildCustomJS']);
-    gulp.watch('./src/vendor_entries/vendor.js', ['buildJsVendors']);
-    watch('./src/scss/**/*', function () {
+    gulp.watch(`./${Paths.src}/${Paths.srcJS}/**/*`, ['buildCustomJS']);
+    gulp.watch(`./${Paths.src}/vendor_entries/vendor.js`, ['buildJsVendors']);
+    watch(`./${Paths.src}/${Paths.scss}/**/*`, function () {
       gulp.run('buildSass');
     });
-    gulp.watch('./src/vendor_entries/vendor.scss', ['buildStylesVendors']);
-    watch('./src/images/**/*', function () {
+    gulp.watch(`./${Paths.src}/vendor_entries/vendor.scss`, ['buildStylesVendors']);
+    watch(`./${Paths.src}/${Paths.srcImages}/**/*`, function () {
       gulp.run('imageMin');
     });
-    gulp.watch(['./build/*', './*.html']).on('change', function (file) {
+    gulp.watch([`./${Paths.build}/*`, './*.html']).on('change', function (file) {
       gulp.src(file.path).pipe(connect.reload());
     });
   });
@@ -128,29 +136,29 @@
    */
   gulp.task('production', ['cleanProduction'], function () {    
     gulp.src(['./**/*',
-      '!src/',
-      '!src/**/*',
+      `!${Paths.src}/`,
+      `!${Paths.src}/**/*`,
       '!bower/',
       '!bower/**/*',
       '!node_modules/**/*',
       '!node_modules/',
-      '!build/**.map',
+      `!${Paths.build}/**.map`,
       '!.bowerrc',
       '!bower.json',
       '!.gitignore',
       '!gulpfile.js',
       '!LICENSE',
       '!package.json',
-      '!production',
+      `!${Paths.production}`,
       '!README.md'])
-          .pipe(gulp.dest('./production'));
+          .pipe(gulp.dest(`./${Paths.production}`));
   });
 
   /**
    * Clean production folder
    */
   gulp.task('cleanProduction', function () {
-    return gulp.src('./production/', {read: false})
+    return gulp.src(`./${Paths.production}/`, {read: false})
       .pipe(rimraf());
   });
 
@@ -158,8 +166,8 @@
    * Copy custom fonts to the build folder
    */
   gulp.task('copyFonts', function () {
-    gulp.src(['./src/fonts/**/*'])
-      .pipe(gulp.dest('./build/fonts/'));
+    gulp.src([`./${Paths.src}/${Paths.fonts}/**/*`])
+      .pipe(gulp.dest(`./${Paths.build}/${Paths.fonts}/`));
   });
 
   /**
