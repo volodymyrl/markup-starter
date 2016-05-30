@@ -117,7 +117,7 @@
     watch(`./${Paths.src}/${Paths.srcImages}/**/*`, function () {
       gulp.run('imageMin');
     });
-    gulp.watch([`./${Paths.build}/*`, './*.html']).on('change', function (file) {
+    gulp.watch([`./${Paths.build}/**/*`, './*.html']).on('change', function (file) {
       gulp.src(file.path).pipe(connect.reload());
     });
   });
