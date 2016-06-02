@@ -66,7 +66,7 @@
         showError.apply(this, ['Sass compile error', err]);
       }))
       .pipe(cssnano({safe: true}))
-      .pipe(autoprefixer('last 2 versions'))
+      .pipe(autoprefixer('last 3 versions'))
       .pipe(sourcemaps.write('./'))
       .pipe(gulp.dest(`./${Paths.build}/`));
   });
