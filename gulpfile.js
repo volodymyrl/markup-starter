@@ -3,6 +3,7 @@
 
   var gulp = require('gulp'),
     sass = require('gulp-sass'),
+    gcmq = require('gulp-group-css-media-queries'),
     autoprefixer = require('gulp-autoprefixer'),
     watch = require('gulp-watch'),
     newer = require('gulp-newer'),
@@ -65,6 +66,7 @@
       .pipe(sass().on('error', function (err) {
         showError.apply(this, ['Sass compile error', err]);
       }))
+      .pipe(gcmq())
       .pipe(cssnano({safe: true}))
       .pipe(autoprefixer('last 3 versions'))
       .pipe(sourcemaps.write('./'))
