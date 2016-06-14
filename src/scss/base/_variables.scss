@@ -24,7 +24,7 @@ $base-min-width: 320px;
 // Liks
 $base-link-color: $light-blue;
 
-// Buttons 
+// Buttons
 $btn-color: $white !default;
 $btn-background: $black !default;
 $btn-padding: 0.4em 0.7em !default;
@@ -49,3 +49,23 @@ $headings-color: inherit !default;
 
 
 $animation-speed: 0.3s;
+
+
+$breakpoints: (
+  'xs-phone': 320px,
+  'phone': 480px,
+  'tablet': 768px,
+  'desktop': 1024px,
+  'widescreen': 1200px
+);
+
+// keywords
+$media-expressions: (
+  'screen': 'screen',
+  'print': 'print',
+  'handheld': 'handheld',
+  'landscape': '(orientation: landscape)',
+  'portrait': '(orientation: portrait)',
+  'retina2x': '(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)',
+  'retina3x': '(-webkit-min-device-pixel-ratio: 2.5), (min-resolution: 240dpi)'
+);
