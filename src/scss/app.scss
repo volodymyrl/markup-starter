@@ -1,5 +1,7 @@
+/* Vendors*/
 @import './bower/include-media/dist/include-media';
 
+/* Base modules*/
 @import 'base/variables';
 @import 'base/functions';
 @import 'base/mixins';
@@ -8,9 +10,5 @@
 @import 'base/typography';
 @import 'base/forms';
 
+/* Components */
 @import 'components/starter-box';
-
-#wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-}
